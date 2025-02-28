@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Progress Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Study Progress Tracker</h1>
+    
+    <h3 id="currentDate"></h3>
+
+    <div id="subjects">
+        <!-- Inputs will be added dynamically -->
+    </div>
+
+    <button onclick="saveProgress()">Save Progress</button>
+    <button onclick="resetProgress()">Reset Progress</button>
+
+    <h3 id="result">Your predicted grade: </h3>
+
+    <canvas id="studyChart"></canvas>
+
+    <script src="main.js"></script>
+</body>
+</html>
