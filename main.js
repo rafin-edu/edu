@@ -10,9 +10,8 @@ const studyTargets = {
     "Physics": 30,
     "Chemistry": 25,
     "Biology": 30,
-    "BGS": 35,
-    "Islam": 35,
-    "Religion": 25
+    "BGS": 30,
+    "Islam": 30
 };
 
 // Get current date (live time tracking)
