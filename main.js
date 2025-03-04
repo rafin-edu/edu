@@ -152,11 +152,12 @@ function saveProgress() {
 
   updateChart();
 }
-
-// Reset progress
 function resetProgress() {
-  localStorage.clear();
-  location.reload();
+    const confirmation = confirm("Are you sure you want to reset your progress?");
+    if (confirmation) {
+        localStorage.removeItem("studyData"); // Assuming you're using localStorage
+        location.reload(); // Refresh the page to clear inputs
+    }
 }
 
 // Create Chart.js bar chart
