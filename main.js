@@ -2,15 +2,15 @@
 const studyTargets = {
     "Bangla 1st": 30,
     "Bangla 2nd": 25,
-    "English 1st": 25,
+    "English 1st": 20,
     "English 2nd": 30,
     "ICT": 10,
-    "Math": 25,
+    "Math": 20,
     "Higher Math": 30,
     "Physics": 30,
     "Chemistry": 25,
     "Biology": 30,
-    "BGS": 30,
+    "BGS": 25,
     "Islam": 30
 };
 
