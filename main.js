@@ -64,7 +64,7 @@ function generateSubjectFields(group) {
             <input type="number" id="${subject}" value="${
       studyProgress[subject] || ""
     }" placeholder="Hours" min="0">
-            <button class="plus-btn" onclick="addMinutes('${subject}', 20)">➕</button>
+            <button class="plus-btn" onclick="addMinutes('${subject}', 30)">➕</button>
         `;
 
     subjectsDiv.appendChild(div);
