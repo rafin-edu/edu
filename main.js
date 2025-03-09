@@ -178,7 +178,7 @@ let studyChart = new Chart(ctx, {
     ],
   },
   options: {
-    scales: { y: { beginAtZero: true, max: 10 } },
+    scales: { y: { beginAtZero: true, max: 300 } },
   },
 });
 
