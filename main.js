@@ -1,5 +1,6 @@
 // @ts-check
 // filepath: /E:/Code/HTML_CSS_JS/edu/main.js
+
 // Study hour goals for each subject
 const studyTargets = {
   Science: {
@@ -32,63 +33,83 @@ const studyTargets = {
   },
 };
 
-// Get current date (live time tracking)
+// Get current date
 function getCurrentDate() {
   const today = new Date();
   return today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 }
 
-// Store progress in localStorage
+// Initialize local storage
 let studyProgress = JSON.parse(localStorage.getItem("studyProgress")) || {};
 let dailyStudy = JSON.parse(localStorage.getItem("dailyStudy")) || {};
+let previousWeeksData = JSON.parse(localStorage.getItem("previousWeeksData")) || [];
 let carryOverHours = JSON.parse(localStorage.getItem("carryOver")) || 0;
 let currentDate = getCurrentDate();
 let studentGroup = localStorage.getItem("studentGroup") || null;
 
-// Show current date
-document.getElementById(
-  "currentDate"
-).innerText = `Today's Date: ${currentDate}`;
+// Track start date for weekly reset
+let startDate = localStorage.getItem("startDate");
+if (!startDate) {
+  startDate = currentDate;
+  localStorage.setItem("startDate", startDate);
+}
 
-// Function to generate input fields dynamically based on the selected group
+// Function to reset weekly data
+function weeklyReset() {
+  const today = new Date();
+  const start = new Date(startDate);
+  const difference = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+
+  if (difference >= 7) {
+    previousWeeksData.push({ startDate, dailyStudy });
+    localStorage.setItem("previousWeeksData", JSON.stringify(previousWeeksData));
+
+    // Reset current week data
+    dailyStudy = {};
+    localStorage.setItem("dailyStudy", JSON.stringify(dailyStudy));
+    
+    // Update start date for next week
+    startDate = getCurrentDate();
+    localStorage.setItem("startDate", startDate);
+
+    updateChart(); // Refresh chart
+  }
+}
+
+// Show current date
+document.getElementById("currentDate").innerText = `Today's Date: ${currentDate}`;
+
+// Function to generate subject input fields
 function generateSubjectFields(group) {
   const subjectsDiv = document.getElementById("subjects");
-  subjectsDiv.innerHTML = ""; // Clear existing subjects
+  subjectsDiv.innerHTML = "";
 
   Object.keys(studyTargets[group]).forEach((subject) => {
     let div = document.createElement("div");
     div.classList.add("subject-item");
 
     div.innerHTML = `
-            <span>${subject} (Goal: ${studyTargets[group][subject]}h)</span>
-            <input type="number" id="${subject}" value="${
-      studyProgress[subject] || ""
-    }" placeholder="Hours" min="0">
-            <button class="plus-btn" onclick="addMinutes('${subject}', 30)">➕</button>
-        `;
+      <span>${subject} (Goal: ${studyTargets[group][subject]}h)</span>
+      <input type="number" id="${subject}" value="${studyProgress[subject] || ""}" placeholder="Hours" min="0">
+      <button class="plus-btn" onclick="addMinutes('${subject}', 30)">➕</button>
+    `;
 
     subjectsDiv.appendChild(div);
   });
 }
 
-// Function to prompt the user to select their group
+// Select group
 function selectGroup() {
   studentGroup = localStorage.getItem("studentGroup");
   if (!studentGroup) {
     studentGroup = prompt("Enter your group (Science or Commerce):");
-    if (
-      studentGroup &&
-      (studentGroup.toLowerCase() === "science" ||
-        studentGroup.toLowerCase() === "commerce")
-    ) {
-      studentGroup =
-        studentGroup.charAt(0).toUpperCase() +
-        studentGroup.slice(1).toLowerCase();
+    if (studentGroup && (studentGroup.toLowerCase() === "science" || studentGroup.toLowerCase() === "commerce")) {
+      studentGroup = studentGroup.charAt(0).toUpperCase() + studentGroup.slice(1).toLowerCase();
       localStorage.setItem("studentGroup", studentGroup);
       generateSubjectFields(studentGroup);
     } else {
       alert("Invalid group. Please enter 'Science' or 'Commerce'.");
-      selectGroup(); // Re-prompt if the input is invalid
+      selectGroup();
     }
   } else {
     generateSubjectFields(studentGroup);
@@ -100,8 +121,9 @@ if (!dailyStudy[currentDate]) {
   dailyStudy[currentDate] = 0;
 }
 
-// Call selectGroup when the page loads
+// Call functions on page load
 selectGroup();
+weeklyReset();
 
 // Convert minutes to hours
 function addMinutes(subject, minutes) {
@@ -117,7 +139,6 @@ function saveProgress() {
   let totalTarget = 8.25;
   let allSubjectsCompleted = true;
 
-  // Sum the study hours for each subject
   Object.keys(studyTargets[studentGroup]).forEach((subject) => {
     let inputVal = parseFloat(document.getElementById(subject).value) || 0;
     studyProgress[subject] = inputVal;
@@ -131,12 +152,8 @@ function saveProgress() {
   // Check if study goal is met
   if (totalStudy < totalTarget) {
     let deficit = totalTarget - totalStudy;
-    alert(
-      `You missed ${deficit.toFixed(
-        2
-      )} hours today! This will be added to tomorrow's goal.`
-    );
-    carryOverHours += deficit; // Add to next day's goal
+    alert(`You missed ${deficit.toFixed(2)} hours today! This will be added to tomorrow's goal.`);
+    carryOverHours += deficit;
   }
 
   // Save data
@@ -152,14 +169,16 @@ function saveProgress() {
 
   updateChart();
 }
+
+// Reset progress
 function resetProgress() {
-    const confirmation = confirm("Are you sure you want to reset your progress?");
-    if (confirmation) {
-        localStorage.removeItem("studyData"); // Assuming you're using localStorage
-        localStorage.clear();
-        location.reload(); // Refresh the page to clear inputs
-    }
+  const confirmation = confirm("Are you sure you want to reset your progress?");
+  if (confirmation) {
+    localStorage.clear();
+    location.reload();
+  }
 }
+  
 
 // Create Chart.js bar chart
 const ctx = document.getElementById("studyChart").getContext("2d");
