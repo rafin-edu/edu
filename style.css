@@ -3,6 +3,9 @@ body {
     text-align: center;
     background-color: #f4f4f4;
 }
+h3{
+  color: blue;
+}
 
 h1 {
     color: #333;
@@ -50,7 +53,7 @@ button {
 }
 
 button:hover {
-    background: #218838;
+    background: darkcyan;
 }
 
 .plus-btn {

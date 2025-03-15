@@ -4,18 +4,18 @@
 // Study hour goals for each subject
 const studyTargets = {
   Science: {
-    "Bangla 1st": 30,
-    "Bangla 2nd": 25,
-    "English 1st": 20,
-    "English 2nd": 30,
-    ICT: 10,
-    Math: 20,
-    "Higher Math": 30,
-    Physics: 30,
-    Chemistry: 25,
-    Biology: 30,
+    "Bangla 1st": 20,
+    "Bangla 2nd": 5,
+    "English 1st": 5,
+    "English 2nd": 20,
+    ICT: 5,
+    Math: 5,
+    "Higher Math": 20,
+    Physics: 20,
+    Chemistry: 15,
+    Biology: 25,
     BGS: 25,
-    Religion: 30,
+    Religion: 15,
   },
   Commerce: {
     "Bangla 1st": 30,
@@ -136,7 +136,7 @@ function addMinutes(subject, minutes) {
 // Save progress
 function saveProgress() {
   let totalStudy = 0;
-  let totalTarget = 8.25;
+  let totalTarget = 180;
   let allSubjectsCompleted = true;
 
   Object.keys(studyTargets[studentGroup]).forEach((subject) => {
